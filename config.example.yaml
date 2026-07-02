@@ -1,0 +1,111 @@
+# ==============================================
+# Virtual AI Companion — Configuration
+# ==============================================
+# 复制此文件为 config.yaml 并填入你的配置
+
+# --- Live2D Model ---
+live2d:
+  model_path: "models/Furina/芙宁娜.model3.json"
+  scale: 0.8
+  window:
+    width: 400
+    height: 500
+    always_on_top: true
+    x: null   # null = auto-position
+    y: null
+
+# --- Audio Capture ---
+audio:
+  sample_rate: 16000
+  vad_sensitivity: 3.5       # 1.2=very sensitive, 3.0=less sensitive
+  silence_timeout: 1.0       # seconds of silence to end utterance
+  max_record_duration: 15.0  # max recording length
+  capture_system_audio: true # WASAPI loopback (system sound)
+  mic_device_index: null     # null = default mic
+  loopback_device_index: null
+
+# --- Speech-to-Text ---
+stt:
+  # Local model path (takes priority over model_size)
+  model_path: "models/whisper-medium"   # null = download from HuggingFace
+  model_size: "medium"   # fallback if model_path not found
+  device: "cpu"         # cuda or cpu (cuda needs CUDA 12 Toolkit installed)
+  compute_type: "int8"
+  language: "zh"
+
+# ==============================================
+# --- LLM  (choose ONE provider below) ---
+# ==============================================
+llm:
+  # ═══ Provider: "openai" or "ollama" ═══
+  provider: "openai"
+
+  # --- OpenAI-compatible API (DeepSeek, OpenAI, etc.) ---
+  # Get your DeepSeek API key: https://platform.deepseek.com
+  api_key: "sk-your-api-key-here"   # ← 替换成你的 API key
+  base_url: "https://api.deepseek.com"
+  model: "deepseek-v4-flash"       # deepseek-chat or deepseek-reasoner
+  max_tokens: 512
+  vision_enabled: false        # DeepSeek API is text-only
+  thinking_enabled: false      # disable chain-of-thought → faster response
+
+  # --- Ollama (local) ---
+  # provider: "ollama"
+  # host: "http://localhost:11434"
+  # model: "llava:13b"
+  # vision_enabled: true
+
+  # --- Common settings ---
+  system_prompt: |
+    你是一个名叫"芙宁娜"的AI伙伴，一个活泼可爱、善解人意的虚拟角色。
+    回复要求：
+    - 使用中文回复，语气自然亲切，像朋友聊天一样
+    - 回复简洁，控制在2-3句话以内（因为要用语音读出来）
+    - 可以适当使用语气词（呢、吧、哦、呀）
+    - 偶尔开小玩笑，保持轻松愉快的氛围
+    - 在回复末尾用方括号标注表情：[happy]、[sad]、[surprised]、[angry]、[neutral]
+  max_history: 10
+  temperature: 0.8
+  screen_context_enabled: true       # inject OCR screen text into LLM context
+  computer_control_enabled: true    # inject action tag instructions into system prompt
+
+# --- Text-to-Speech ---
+tts:
+  voice: "zh-CN-XiaoxiaoNeural"
+  rate: "+5%"
+  pitch: "+0Hz"
+
+# --- Screen Capture ---
+screen:
+  monitor: 0
+  max_dimension: 1024
+  quality: 75
+  capture_interval: 2.0
+  ocr_enabled: true           # 配合ocr.enabled，CPU模式尝试
+
+# --- Screen OCR (extract text from screenshots) ---
+ocr:
+  enabled: true               # 尝试CPU模式，避开CUDA冲突
+  languages: ["ch_sim", "en"] # easyocr language codes
+  gpu: false                  # 强制CPU，避免与faster-whisper的CTranslate2抢CUDA
+  min_confidence: 0.3
+
+# --- Computer Control (AI can execute desktop actions) ---
+computer_control:
+  enabled: true              # DANGER: set true to let AI control your desktop
+  confirm_before_execute: False
+
+# --- Long-term Memory ---
+memory:
+  db_path: "data/memory.db"     # SQLite database file
+  use_chromadb: true            # semantic search (requires pip install chromadb)
+  max_search_results: 3         # max memories to inject into prompt
+  auto_extract_facts: true      # auto-extract user facts from conversations
+
+# --- Behavior ---
+behavior:
+  idle_animations: true
+  idle_motion_interval: 15.0
+  greet_on_start: true
+  greeting_message: null
+  response_mode: "voice"  # "voice" = TTS + text display, "text" = text display only

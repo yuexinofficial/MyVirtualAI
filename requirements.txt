@@ -1,0 +1,16 @@
+PyQt5>=5.15.0
+PyQtWebEngine>=5.15.0
+mss>=9.0.0
+pyaudio>=0.2.11
+numpy>=1.24.0
+faster-whisper>=1.0.0
+edge-tts>=6.1.0
+openai>=1.0.0
+pydub>=0.25.0
+Pillow>=10.0.0
+pyyaml>=6.0
+sounddevice>=0.4.6
+soundfile>=0.12.0
+chromadb>=0.4.0
+easyocr>=1.7.0
+pyautogui>=0.9.54

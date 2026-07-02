@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Runtime data (database files, logs)
+data/
+*.db
+*.db-shm
+*.db-wal
+*.log
+
+# Model files (too large for Git / download separately)
+models/whisper-medium/
+models/whisper-*/
+
+# Config with secrets (use config.example.yaml as template)
+config.yaml
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
